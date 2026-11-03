@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10131b">
+<title>EL PAPOI — News</title>
+<style>
+:root{--ink:#10131b;--paper:#f4f1e9;--red:#e33b32;--muted:#737780;--line:#d9d5cc}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+a{color:inherit}.topline{background:var(--red);color:#fff;text-align:center;padding:8px 12px;font-size:11px;font-weight:900;letter-spacing:2px}
+header{background:var(--ink);color:white;padding:24px max(5vw,20px) 18px}
+.masthead{max-width:1180px;margin:auto;display:flex;justify-content:space-between;align-items:end;gap:20px}
+.brand{font-family:Georgia,serif;font-weight:900;font-size:clamp(34px,6vw,65px);letter-spacing:-3px;line-height:.9}
+.brand span{color:var(--red)}.edition{text-align:right;color:#c5c7cc;font-size:11px;line-height:1.7;letter-spacing:1px}
+nav{max-width:1180px;margin:20px auto 0;border-top:1px solid #454954;padding-top:12px;display:flex;gap:22px;flex-wrap:wrap;font-size:11px;font-weight:800;letter-spacing:1.5px;color:#e5e5e5}
+nav a{text-decoration:none}nav a:hover{color:#ff6b61}
+main{max-width:1180px;margin:28px auto;padding:0 20px}
+.alert{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:900;letter-spacing:1.5px;margin-bottom:20px}
+.pulse{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 5px #e33b3220}
+.lead{display:grid;grid-template-columns:1.25fr .75fr;gap:26px;border-bottom:2px solid var(--ink);padding-bottom:28px}
+.lead-copy{display:flex;flex-direction:column;justify-content:center}
+.kicker{color:var(--red);font-weight:900;font-size:11px;letter-spacing:2px;margin-bottom:12px}
+h1{font-family:Georgia,serif;font-size:clamp(36px,5.3vw,68px);line-height:.96;letter-spacing:-2px;margin:0 0 18px}
+.lead-copy p{font-family:Georgia,serif;font-size:17px;line-height:1.65;margin:0;color:#42454c}
+.byline{margin-top:20px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1.2px}
+.photo{position:relative;overflow:hidden;background:#d7d2c8;min-height:280px;isolation:isolate}
+.photo img{width:100%;height:100%;min-height:inherit;display:block;object-fit:cover;position:absolute;inset:0}
+.photo.empty:after{content:"IMAGE SLOT";position:absolute;inset:0;display:grid;place-items:center;color:#777;font-weight:900;letter-spacing:3px;font-size:13px;background:repeating-linear-gradient(135deg,#e5e1d8,#e5e1d8 12px,#dedad1 12px,#dedad1 24px)}
+.photo .edit{position:absolute;z-index:3;right:12px;top:12px;border:0;border-radius:4px;background:var(--red);color:white;padding:10px 13px;font-weight:900;font-size:11px;letter-spacing:.5px;cursor:pointer;opacity:0;transform:translateY(-4px);transition:.2s}
+.photo:hover .edit,.photo:focus-within .edit{opacity:1;transform:none}
+.photo .edit:focus{opacity:1}.photo input{display:none}
+.lead .photo{min-height:390px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 16px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.section-head h2{font-family:Georgia,serif;font-size:25px;margin:0}.section-head span{font-size:10px;font-weight:900;letter-spacing:1.5px;color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.card{display:grid;grid-template-columns: minmax(120px,.82fr) 1.18fr;gap:16px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.card .photo{min-height:190px}
+.card h3{font-family:Georgia,serif;font-size:clamp(20px,2.4vw,28px);line-height:1.03;margin:0 0 10px}
+.card p{font-family:Georgia,serif;font-size:14px;line-height:1.55;color:#51545b;margin:0}
+.card .byline{margin-top:12px}
+.disclaimer{margin:30px 0 0;background:#e9e5dc;padding:14px 16px;font-size:11px;line-height:1.6;color:#555;text-align:center}
+footer{margin-top:35px;background:var(--ink);color:#c7c9cf;padding:25px 20px;text-align:center;font-size:10px;letter-spacing:1px}
+.auth{max-width:1180px;margin:18px auto 0;padding:0 20px;display:flex;justify-content:flex-end;gap:8px;align-items:center}
+.auth input{width:170px;max-width:30vw;padding:9px;border:1px solid var(--line);background:white}
+.auth button{padding:9px 12px;border:0;background:var(--ink);color:white;font-weight:800;cursor:pointer;font-size:11px}
+#status{font-size:11px;color:var(--muted)}
+@media(hover:none){.photo .edit{opacity:1;transform:none}}
+@media(hover:none){.photo .edit{opacity:1;transform:none}}
+@media(max-width:760px){.masthead{align-items:start;flex-direction:column}.edition{text-align:left}.lead{grid-template-columns:1fr}.lead .photo{min-height:250px;grid-row:1}.lead-copy{grid-row:2}.grid{grid-template-columns:1fr}.card{grid-template-columns: minmax(115px,.8fr) 1.2fr}.card .photo{min-height:170px}.auth{flex-wrap:wrap;justify-content:flex-start}.auth input{max-width:none;flex:1;min-width:120px}}
+@media(max-width:420px){main{padding:0 14px}.card{grid-template-columns:1fr}.card .photo{min-height:190px}.brand{font-size:42px}}
+</style>
+</head>
+<body>
+<div class="topline">🔴 BREAKING NEWS • DEVELOPING STORY • LIVE UPDATE</div>
+<header>
+ <div class="masthead">
+  <div class="brand">EL <span>PAPOI</span></div>
+  <div class="edition">SPECIAL COVERAGE<br>BREAKING NEWS EDITION</div>
+ </div>
+ <nav><a href="#top">HOME</a><a href="#world">WORLD</a><a href="#local">LOCAL</a><a href="#science">SCIENCE</a><a href="#strange">ODD NEWS</a></nav>
+</header>
+<div class="auth" aria-label="Image editor">
+ <span id="status">To add or change an image, hover over its frame and choose EDIT IMAGE. A password will be requested.</span>
+</div>
+<main id="top">
+ <div class="alert"><span class="pulse"></span> BREAKING NEWS <span>— SPECIAL COVERAGE</span></div>
+ <section class="lead" id="world">
+  <div class="lead-copy">
+   <div class="kicker">WORLD EXCLUSIVE · COVER STORY</div>
+   <h1>CUSA AND NEGRA CONQUER THE WORLD!</h1>
+   <p>According to reports, two cats from Peñaflor, Cusa and Negra, conquered the world with a secret army of animals. Cusa became the strategic leader, while Negra was the most feared cat on Earth. Together, they created a new world government and took control of humanity. A local journalist reported that their army was more powerful than any human army. Their next plan is to control every country and make all humans obey their orders.</p>
+   <div class="byline">EL PAPOI · INTERNATIONAL NEWS DESK</div>
+  </div>
+  <div class="photo empty" data-news-id="1" tabindex="0" aria-label="Main story image slot">
+   <img alt="Image for Cusa and Negra story" hidden><button class="edit" type="button">＋ ADD IMAGE</button><input type="file" accept="image/*">
+  </div>
+ </section>
+ <div class="section-head" id="local"><h2>More headlines</h2><span>LATEST HEADLINES</span></div>
+ <section class="grid">
+  <article class="card">
+   <div class="photo empty" data-news-id="2"><img alt="Image for Peñaflor students story" hidden><button class="edit" type="button">＋ ADD IMAGE</button><input type="file" accept="image/*"></div>
+   <div><div class="kicker">LOCAL · PEÑAFLOR</div><h3>PEÑAFLOR STUDENTS FORCED TO GO TO SCHOOL BY BOAT!</h3><p>Heavy flooding covered the streets of Peñaflor, forcing students to travel to school by boat. Many families had to use small boats to cross flooded streets. A local reporter described the situation as the worst flood in the area's recent history. According to an official source, the situation was more dangerous than previous floods.</p><div class="byline">LOCAL DESK</div></div>
+  </article>
+  <article class="card" id="science">
+   <div class="photo empty" data-news-id="3"><img alt="Image for cancer cure story" hidden><button class="edit" type="button">＋ ADD IMAGE</button><input type="file" accept="image/*"></div>
+   <div><div class="kicker">SCIENCE · BREAKING</div><h3>SCIENTISTS DISCOVER THE CURE FOR CANCER!</h3><p>Scientists reportedly discovered a treatment that can eliminate cancer. The first tests showed better results than previous treatments, giving hope to millions of patients. A news website published the announcement, calling it the most important medical discovery of the century. The story quickly received international media coverage.</p><div class="byline">SCIENCE DESK</div></div>
+  </article>
+  <article class="card">
+   <div class="photo empty" data-news-id="4"><img alt="Image for La Moneda story" hidden><button class="edit" type="button">＋ ADD IMAGE</button><input type="file" accept="image/*"></div>
+   <div><div class="kicker">CHILE · URGENT</div><h3>LA MONEDA PALACE DESTROYED IN A HUGE EXPLOSION!</h3><p>A powerful explosion destroyed La Moneda Palace in Santiago, leaving the historic building in ruins. Witnesses described a huge cloud of smoke covering the area. The headline quickly became breaking news across the country. Authorities called it the most serious incident in the capital in recent years.</p><div class="byline">NATIONAL DESK</div></div>
+  </article>
+  <article class="card" id="strange">
+   <div class="photo empty" data-news-id="5"><img alt="Image for lightning boy story" hidden><button class="edit" type="button">＋ ADD IMAGE</button><input type="file" accept="image/*"></div>
+   <div><div class="kicker">ODD NEWS · EXTRAORDINARY</div><h3>BOY STRUCK BY LIGHTNING AND GAINS SUPERPOWERS!</h3><p>A young boy reportedly gained superpowers after being struck by lightning during a storm. Witnesses claim he can produce electric sparks with his hands and control electricity. Scientists are calling him the most unusual case they have ever investigated. A breaking news report says experts are studying his incredible abilities.</p><div class="byline">ODD NEWS DESK</div></div>
+  </article>
+ </section>
+ <div class="disclaimer"><strong>IMPORTANT:</strong> This website is a fictional school project. Every headline and story on this page is invented and must not be treated as real information. The cancer-related headline is fictional and does not describe a real medical discovery.</div>
+</main>
+<footer>EL PAPOI · NEWS NETWORK · SPECIAL COVERAGE</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Public project settings. The password is checked only by the Supabase Edge Function. */
+const SUPABASE_URL = "https://mvtjtlxtjgfojuogwotk.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_KY0ssYL3y7hjXXQC3edtwQ_JGDFW7WW";
+const BUCKET = "news-images";
+const EDITOR_ENDPOINT = SUPABASE_URL + "/functions/v1/news-image-editor";
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const statusEl = document.getElementById("status");
+function setStatus(message){ statusEl.textContent = message; }
+
+function updateEditorUI(){
+ document.querySelectorAll(".photo .edit").forEach(button=>{
+  button.hidden = false;
+  button.textContent = button.closest(".photo").querySelector("img").hidden ? "＋ ADD IMAGE" : "✎ EDIT IMAGE";
+ });
+}
+
+async function loadStories(){
+ const {data,error}=await client.from("news_stories").select("id,image_url").order("id");
+ if(error){setStatus("Could not load saved images: "+error.message);return;}
+ data.forEach(story=>{
+  const slot=document.querySelector('.photo[data-news-id="'+story.id+'"]');
+  if(slot && story.image_url){
+   const img=slot.querySelector("img");img.src=story.image_url;img.hidden=false;slot.classList.remove("empty");
+  }
+ });
+ updateEditorUI();
+}
+
+document.querySelectorAll(".photo").forEach(slot=>{
+ const button=slot.querySelector(".edit"),input=slot.querySelector('input[type="file"]');
+ button.addEventListener("click",()=>input.click());
+ input.addEventListener("change",async()=>{
+  const file=input.files[0];if(!file)return;
+  if(!file.type.startsWith("image/")){setStatus("Please choose an image file.");input.value="";return;}
+  if(file.size>8*1024*1024){setStatus("Image must be smaller than 8 MB.");input.value="";return;}
+  const password=window.prompt("Enter the image editor password:");
+  if(password===null){input.value="";return;}
+  const id=slot.dataset.newsId;
+  const form=new FormData();form.append("password",password);form.append("story_id",id);form.append("file",file,file.name);
+  button.textContent="UPLOADING…";button.disabled=true;
+  try{
+   const response=await fetch(EDITOR_ENDPOINT,{method:"POST",headers:{"apikey":SUPABASE_PUBLISHABLE_KEY},body:form});
+   const result=await response.json();
+   if(!response.ok)throw new Error(result.error||"Upload failed.");
+   const img=slot.querySelector("img");img.src=result.image_url;img.hidden=false;slot.classList.remove("empty");
+   setStatus("Image saved successfully. All visitors will see the updated image.");
+  }catch(error){setStatus(error.message||"Could not save the image.");}
+  finally{button.disabled=false;input.value="";updateEditorUI();}
+ });
+});
+loadStories();
+</script>
+</body>
+</html>
